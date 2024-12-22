@@ -37,13 +37,7 @@ jobs:
           curl -fLo /usr/local/bin/td https://github.com/tgagor/template-dockerfiles/releases/latest/download/td-linux-amd64
           chmod +x /usr/local/bin/td
 
-          td --config build.yaml --build --delete --push --tag ${DOCKER_TAG}
-
-      - name: Extract version from tag on main
-        if: github.ref == 'refs/heads/main'
-        env:
-          VERSION_TAG: ${{ steps.tag_version.outputs.new_tag }}
-        run: echo "DOCKER_TAG=${VERSION_TAG#v}" >> $GITHUB_ENV
+          td --config build.yaml --build --delete --push --tag ${{ steps.tag_version.outputs.new_tag }}
 
       - name: Use branch name as version not on main
         if: github.ref != 'refs/heads/main'
