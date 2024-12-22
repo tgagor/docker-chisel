@@ -1,0 +1,30 @@
+---
+prefix: tgagor
+maintainer: Tomasz Gągor <https://gagor.pro>
+
+labels:
+  org.opencontainers.image.licenses: GPL-3.0-only
+  org.opencontainers.image.url: https://hub.docker.com/repository/docker/tgagor/chisel/general
+  org.opencontainers.image.documentation: https://github.com/tgagor/docker-chisel/blob/master/README.md
+  org.opencontainers.image.title: Base image with Ubuntu's Chisel tool
+  org.opencontainers.image.description: |
+    This is image with Chisel tool and Chisel Releases:
+    https://github.com/canonical/chisel
+    https://github.com/canonical/chisel-releases
+
+images:
+  chisel:
+    dockerfile: chisel/Dockerfile.tpl
+    variables:
+      ubuntu:
+        - "24.04"
+        - "22.04"
+      chisel: v1.0.0
+    tags:
+      - chisel:{{ .ubuntu }}
+      - chisel:{{ .tag }}-{{ .centos }}
+      - chisel:{{ .tag | splitList "-" | first }}
+      - chisel:{{ .centos }}-{{ .tag | splitList "-" | rest | first }}
+      - chisel:latest
+    labels:
+      org.opencontainers.image.base.name: quay.io/centos/centos:{{ .centos }}
