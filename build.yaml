@@ -17,14 +17,16 @@ images:
     dockerfile: chisel/Dockerfile.tpl
     variables:
       ubuntu:
-        - "24.04"
+        - "20.04"
         - "22.04"
+        - "24.04"
+        - "24.10"
       chisel: v1.0.0
     tags:
+      - chisel:{{ .tag }}-{{ .ubuntu }}-{{ now | date "2006-01-02" }}
+      - chisel:{{ .tag }}-{{ .ubuntu }}
+      - chisel:{{ .ubuntu }}-{{ now | date "2006-01-02" }}
       - chisel:{{ .ubuntu }}
-      - chisel:{{ .tag }}-{{ .centos }}
-      - chisel:{{ .tag | splitList "-" | first }}
-      - chisel:{{ .centos }}-{{ .tag | splitList "-" | rest | first }}
       - chisel:latest
     labels:
-      org.opencontainers.image.base.name: quay.io/centos/centos:{{ .centos }}
+      org.opencontainers.image.base.name: ubuntu:{{ .ubuntu }}
