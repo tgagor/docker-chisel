@@ -1,21 +1,49 @@
 SHELL=/bin/bash
-DOCKER_REGISTRY ?= tgagor
-BUILD_DATE ?= $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
+BUILD_CONFIG ?= build.yaml
+DOCKER_REGISTRY ?= $(shell cat $(BUILD_CONFIG)| yq -r .prefix)
 GIT_COMMIT ?= $(shell git rev-parse HEAD)
 GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 GIT_URL ?= $(shell git config --get remote.origin.url)
 GIT_TAG ?= $(shell echo $(GIT_BRANCH) | sed -E 's/[/:]/-/g' | sed 's/master/latest/' )
 DOCKER_CMD ?= docker
-MAINTAINER ?= "Tomasz Gągor <https://gagor.pro>"
+MAINTAINER ?= $(shell cat build.yaml| yq -r '.maintainer')
+IMAGES := $(shell cat build.yaml| yq -r '.images|keys[]')
 
 # use numer of available CPUs to run multiple builds at the same time
 PARALLEL := $(shell $(DOCKER_CMD) info --format "{{ .NCPU }}")
 
-all: $(STAGES) summary
+.PHONY: all all-images push summary clean
 
+all: build summary
 
+build:
+	$(call stage_status,$@)
+	td --config $(BUILD_CONFIG) \
+		--build \
+		--delete \
+		--tag $(GIT_TAG)
 
-.PHONY: all $(SUBDIRS) push summary clean
+$(IMAGES):
+	$(call stage_status,$@)
+	td --config $(BUILD_CONFIG) \
+		--image $@ \
+		--build \
+		--delete \
+		--tag $(GIT_TAG)
+
+push:
+	td --config $(BUILD_CONFIG) \
+		--delete \
+		--push \
+		--tag $(GIT_TAG)
+
+build-and-push:
+	$(call stage_status,$@)
+	td --config $(BUILD_CONFIG) \
+		--build \
+		--delete \
+		--push \
+		--tag $(GIT_TAG)
 
 define stage_status
 	@echo
@@ -39,7 +67,6 @@ endef
 
 
 clean:
-	@$(DOCKER_CMD) image rm -f $(shell $(DOCKER_CMD) image ls --format "{{.Repository}}:{{.Tag}}" --filter=dangling=false --filter=reference="$(BUILD_PREFIX)/*:*") 2>/dev/null || true
 	@$(DOCKER_CMD) image rm -f $(shell $(DOCKER_CMD) image ls --format "{{.Repository}}:{{.Tag}}" --filter=dangling=false --filter=reference="$(DOCKER_REGISTRY)/*:*") 2>/dev/null || true
 
 prune:
