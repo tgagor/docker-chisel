@@ -14,14 +14,15 @@ labels:
 
 images:
   chisel:
-    dockerfile: chisel/Dockerfile.tpl
+    dockerfile: chisel/Dockerfile
     variables:
       ubuntu:
         - "20.04"
         - "22.04"
         - "24.04"
         - "24.10"
-      chisel: v1.0.0
+    args:
+      UBUNTU_RELEASE: "{{ .ubuntu }}"
     tags:
       - chisel:{{ .tag }}-{{ .ubuntu }}-{{ now | date "2006-01-02" }}
       - chisel:{{ .tag }}-{{ .ubuntu }}
