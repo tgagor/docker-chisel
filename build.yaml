@@ -12,6 +12,10 @@ labels:
     https://github.com/canonical/chisel
     https://github.com/canonical/chisel-releases
 
+platforms:
+  - linux/amd64
+  - linux/arm64
+
 images:
   chisel:
     dockerfile: chisel/Dockerfile

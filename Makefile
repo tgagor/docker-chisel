@@ -20,7 +20,7 @@ build:
 	$(call stage_status,$@)
 	td --config $(BUILD_CONFIG) \
 		--build \
-		--delete \
+		--engine buildx \
 		--tag $(GIT_TAG)
 
 $(IMAGES):
@@ -28,12 +28,11 @@ $(IMAGES):
 	td --config $(BUILD_CONFIG) \
 		--image $@ \
 		--build \
-		--delete \
+		--engine buildx \
 		--tag $(GIT_TAG)
 
 push:
 	td --config $(BUILD_CONFIG) \
-		--delete \
 		--push \
 		--tag $(GIT_TAG)
 
@@ -41,7 +40,7 @@ build-and-push:
 	$(call stage_status,$@)
 	td --config $(BUILD_CONFIG) \
 		--build \
-		--delete \
+		--engine buildx \
 		--push \
 		--tag $(GIT_TAG)
 
