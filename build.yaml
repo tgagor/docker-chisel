@@ -13,8 +13,12 @@ labels:
     https://github.com/canonical/chisel-releases
 
 platforms:
+  - linux/arm/v7
   - linux/amd64
   - linux/arm64
+  - linux/ppc64le
+  - linux/riscv64
+  - linux/s390x
 
 images:
   chisel:
