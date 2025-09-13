@@ -12,8 +12,8 @@ on:
     branches:
       - main
   schedule:
-    # weekly: at 04:13 on Monday
-    - cron: '13 4 * * 1'
+    # monthly: at 04:13
+    - cron: '13 4 1 * *'
 
 jobs:
   build:
