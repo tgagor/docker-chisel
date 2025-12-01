@@ -2,7 +2,7 @@
 ARG UBUNTU_RELEASE=24.04
 FROM ubuntu:$UBUNTU_RELEASE AS fetcher
 ARG TARGETARCH
-ARG CHISEL_VERSION=v1.2.0
+ARG CHISEL_VERSION=v1.3.0
 ENV DEBIAN_FRONTEND=noninteractive
 VOLUME ["/tmp", "/var/tmp", "/var/cache/apt"]
 
