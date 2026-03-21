@@ -21,7 +21,6 @@ build:
 	td --config $(BUILD_CONFIG) \
 		--build \
 		--engine buildx \
-		--verbose \
 		--tag $(GIT_TAG)
 
 $(IMAGES):
@@ -71,6 +70,7 @@ clean:
 
 prune:
 	@$(DOCKER_CMD) system prune --all --force --volumes
+	@$(DOCKER_CMD) buildx prune -a -f
 
 summary:
 	$(call summary)
