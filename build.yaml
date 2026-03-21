@@ -30,6 +30,7 @@ images:
         - "24.04"
         - "25.04"
         - "25.10"
+        - "26.04"
     args:
       UBUNTU_RELEASE: "{{ .ubuntu }}"
     tags:
